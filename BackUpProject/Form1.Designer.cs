@@ -44,10 +44,14 @@
             buttonBackUp = new Button();
             buttonClear = new Button();
             notifyIconBackUp = new NotifyIcon(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            showToolStripMenuItem = new ToolStripMenuItem();
+            exitToolStripMenuItem = new ToolStripMenuItem();
             buttonAdd = new Button();
             labelInfo = new Label();
             timerBackUp = new System.Windows.Forms.Timer(components);
             buttonRestore = new Button();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // textBoxSourcePath
@@ -174,9 +178,31 @@
             // notifyIconBackUp
             // 
             notifyIconBackUp.BalloonTipTitle = "BackUpProject";
+            notifyIconBackUp.ContextMenuStrip = contextMenuStrip1;
             notifyIconBackUp.Icon = (Icon)resources.GetObject("notifyIconBackUp.Icon");
             notifyIconBackUp.Text = "BackUpProject";
             notifyIconBackUp.Visible = true;
+            notifyIconBackUp.MouseDoubleClick += notifyIconBackUp_MouseDoubleClick;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { showToolStripMenuItem, exitToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(104, 48);
+            // 
+            // showToolStripMenuItem
+            // 
+            showToolStripMenuItem.Name = "showToolStripMenuItem";
+            showToolStripMenuItem.Size = new Size(103, 22);
+            showToolStripMenuItem.Text = "Show";
+            showToolStripMenuItem.Click += showToolStripMenuItem_Click;
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(103, 22);
+            exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // buttonAdd
             // 
@@ -200,6 +226,7 @@
             // 
             // timerBackUp
             // 
+            timerBackUp.Enabled = true;
             timerBackUp.Interval = 6000;
             timerBackUp.Tick += timerBackUp_Tick;
             // 
@@ -241,6 +268,9 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "BackUp Project";
+            FormClosing += Form1_FormClosing;
+            Load += Form1_Resize;
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -265,5 +295,8 @@
         private Label labelInfo;
         private System.Windows.Forms.Timer timerBackUp;
         private Button buttonRestore;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem showToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }

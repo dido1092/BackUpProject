@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmStates));
             dataGridViewState = new DataGridView();
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             dbNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -136,6 +137,7 @@
             Controls.Add(labelItems);
             Controls.Add(buttonUpdate);
             Controls.Add(dataGridViewState);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmStates";
             Text = "FrmStates";

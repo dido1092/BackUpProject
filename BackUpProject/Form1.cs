@@ -3,6 +3,7 @@ using BackUpProject.BackUpProjectDataCommon;
 using BackUpProject.BackUpProjectDataModels;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
@@ -89,46 +90,6 @@ namespace BackUpProject
                     : null!;
             }
         }
-
-        //public string[] GetPath()
-        //{
-        //    OpenFileDialog openFileDialog1 = OpenFile();
-
-        //    if (openFileDialog1.ShowDialog() == DialogResult.OK)
-        //    {
-        //        pathToAddFiles = System.IO.Path.GetDirectoryName(openFileDialog1.FileName)!;
-
-        //        pathWithFile = openFileDialog1.FileNames;
-        //    }
-        //    else
-        //    {
-        //        pathWithFile = new string[0];
-        //    }
-        //    return pathWithFile;
-        //}
-        //private static OpenFileDialog OpenFile()
-        //{
-        //    OpenFileDialog openFileDialog1 = new OpenFileDialog()
-        //    {
-        //        InitialDirectory = @"C:\",
-        //        Title = "Browse Doc Files",
-
-        //        CheckFileExists = true,
-        //        CheckPathExists = true,
-
-        //        DefaultExt = "All Files",
-        //        Filter = "All Files (*.*)|*.*",
-        //        FilterIndex = 2,
-        //        RestoreDirectory = true,
-
-        //        Multiselect = true,
-
-        //        ReadOnlyChecked = true,
-        //        ShowReadOnly = true,
-        //    };
-        //    return openFileDialog1;
-        //}
-
         private void buttonBackUp_Click(object sender, EventArgs e)
         {
             FrmStates frmStates = new FrmStates();
@@ -186,15 +147,6 @@ namespace BackUpProject
 
             time = int.Parse(comboBoxTimer.Text);
 
-            //BackUpState backUpState = new BackUpState
-            //{
-            //    Timer = time,
-            //};
-
-            //context.Add(backUpState);
-            //context.SaveChanges();
-
-            //FrmStates frmStates = new FrmStates();
             if (time > 0)
             {
 
@@ -216,24 +168,6 @@ namespace BackUpProject
             SqlConnection cnn = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = cnn;
-
-            //int rowindex = dataGridViewState.CurrentRow!.Index;
-            //int colindex = dataGridViewState.CurrentCell!.ColumnIndex;
-
-            //string? columnName = dataGridViewState.Columns[colindex].HeaderText;
-
-            //string? getValue = dataGridViewState.CurrentCell.Value!.ToString();
-            //string? id = string.Empty;
-
-            //if (idDb != 0)
-            //{
-            //    id = idDb.ToString();
-            //}
-            //else
-            //{
-
-            //    id = dataGridViewState.Rows[rowindex].Cells[0].Value!.ToString();
-            //}
 
             try
             {
@@ -285,6 +219,67 @@ namespace BackUpProject
         {
             FrmRestoreBackUp frmRestoreBackUp = new FrmRestoreBackUp();
             frmRestoreBackUp.Show();
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void notifyIconBackUp_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            notifyIconBackUp.ContextMenuStrip = contextMenuStrip1;
+
+            this.Show();
+
+            MaxmizedFromTray();
+        }
+        private void MinimzedTray()
+        {
+            notifyIconBackUp.Visible = true;
+            notifyIconBackUp.Icon = SystemIcons.Application;
+
+            notifyIconBackUp.BalloonTipText = "Minimized";
+
+            notifyIconBackUp.ShowBalloonTip(500);
+        }
+
+        private void MaxmizedFromTray()
+        {
+            notifyIconBackUp.Visible = true;
+            notifyIconBackUp.BalloonTipText = "Maximized";
+
+            notifyIconBackUp.ShowBalloonTip(500);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            notifyIconBackUp.Visible = true;
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                notifyIconBackUp.Visible = true;
+                this.Hide();
+                e.Cancel = true;
+            }
+        }
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                MinimzedTray();
+            }
+            else if (this.WindowState == FormWindowState.Normal)
+            {
+                MaxmizedFromTray();
+            }
         }
     }
 }

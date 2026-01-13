@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRestoreBackUp));
             textBoxBak = new TextBox();
             buttonBrowse = new Button();
             buttonRestore = new Button();
@@ -101,6 +102,7 @@
             Controls.Add(buttonRestore);
             Controls.Add(buttonBrowse);
             Controls.Add(textBoxBak);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmRestoreBackUp";
             Text = "FrmRestoreBackUp";
