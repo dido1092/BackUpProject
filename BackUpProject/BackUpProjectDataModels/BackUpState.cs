@@ -15,7 +15,8 @@ namespace BackUpProject.BackUpProjectDataModels
         [Key]
         public int Id { get; set; }
         public string DbName { get; set; }
-        public int Timer { get; set; }
+        public int Time { get; set; }
+        public string TimeType { get; set; }
         public bool StateIsOn { get; set; }
         public DateTime LastBackUp { get; set; }
 

@@ -36,7 +36,7 @@
             label2 = new Label();
             textBoxDestPath = new TextBox();
             buttonBrowseDestPath = new Button();
-            comboBoxTimer = new ComboBox();
+            comboBoxTime = new ComboBox();
             label3 = new Label();
             buttonSetTimer = new Button();
             label4 = new Label();
@@ -51,14 +51,16 @@
             labelInfo = new Label();
             timerBackUp = new System.Windows.Forms.Timer(components);
             buttonRestore = new Button();
+            label5 = new Label();
+            comboBoxTimeType = new ComboBox();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // textBoxSourcePath
             // 
-            textBoxSourcePath.Location = new Point(118, 108);
+            textBoxSourcePath.Location = new Point(116, 108);
             textBoxSourcePath.Name = "textBoxSourcePath";
-            textBoxSourcePath.Size = new Size(406, 23);
+            textBoxSourcePath.Size = new Size(408, 23);
             textBoxSourcePath.TabIndex = 1;
             // 
             // label1
@@ -108,19 +110,19 @@
             buttonBrowseDestPath.UseVisualStyleBackColor = false;
             buttonBrowseDestPath.Click += buttonBrowseDestPath_Click;
             // 
-            // comboBoxTimer
+            // comboBoxTime
             // 
-            comboBoxTimer.FormattingEnabled = true;
-            comboBoxTimer.Items.AddRange(new object[] { "1", "2", "3", "5", "10", "30", "60" });
-            comboBoxTimer.Location = new Point(116, 273);
-            comboBoxTimer.Name = "comboBoxTimer";
-            comboBoxTimer.Size = new Size(61, 23);
-            comboBoxTimer.TabIndex = 5;
+            comboBoxTime.FormattingEnabled = true;
+            comboBoxTime.Items.AddRange(new object[] { "1", "2", "3", "5", "10", "30", "60" });
+            comboBoxTime.Location = new Point(116, 273);
+            comboBoxTime.Name = "comboBoxTime";
+            comboBoxTime.Size = new Size(61, 23);
+            comboBoxTime.TabIndex = 5;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(36, 276);
+            label3.Location = new Point(38, 276);
             label3.Name = "label3";
             label3.Size = new Size(74, 15);
             label3.TabIndex = 7;
@@ -129,9 +131,9 @@
             // buttonSetTimer
             // 
             buttonSetTimer.BackColor = SystemColors.ActiveCaption;
-            buttonSetTimer.Location = new Point(183, 273);
+            buttonSetTimer.Location = new Point(48, 354);
             buttonSetTimer.Name = "buttonSetTimer";
-            buttonSetTimer.Size = new Size(75, 23);
+            buttonSetTimer.Size = new Size(129, 34);
             buttonSetTimer.TabIndex = 6;
             buttonSetTimer.Text = "Set";
             buttonSetTimer.UseVisualStyleBackColor = false;
@@ -218,7 +220,7 @@
             // labelInfo
             // 
             labelInfo.AutoSize = true;
-            labelInfo.Location = new Point(36, 356);
+            labelInfo.Location = new Point(42, 431);
             labelInfo.Name = "labelInfo";
             labelInfo.Size = new Size(28, 15);
             labelInfo.TabIndex = 14;
@@ -227,7 +229,7 @@
             // timerBackUp
             // 
             timerBackUp.Enabled = true;
-            timerBackUp.Interval = 6000;
+            timerBackUp.Interval = 60000;
             timerBackUp.Tick += timerBackUp_Tick;
             // 
             // buttonRestore
@@ -241,11 +243,32 @@
             buttonRestore.UseVisualStyleBackColor = false;
             buttonRestore.Click += buttonRestore_Click;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(48, 312);
+            label5.Name = "label5";
+            label5.Size = new Size(62, 15);
+            label5.TabIndex = 16;
+            label5.Text = "Time Type";
+            // 
+            // comboBoxTimeType
+            // 
+            comboBoxTimeType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTimeType.FormattingEnabled = true;
+            comboBoxTimeType.Items.AddRange(new object[] { "Min", "Hours" });
+            comboBoxTimeType.Location = new Point(116, 309);
+            comboBoxTimeType.Name = "comboBoxTimeType";
+            comboBoxTimeType.Size = new Size(61, 23);
+            comboBoxTimeType.TabIndex = 17;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(875, 409);
+            ClientSize = new Size(875, 468);
+            Controls.Add(comboBoxTimeType);
+            Controls.Add(label5);
             Controls.Add(buttonRestore);
             Controls.Add(labelInfo);
             Controls.Add(buttonAdd);
@@ -255,7 +278,7 @@
             Controls.Add(label4);
             Controls.Add(buttonSetTimer);
             Controls.Add(label3);
-            Controls.Add(comboBoxTimer);
+            Controls.Add(comboBoxTime);
             Controls.Add(buttonBrowseDestPath);
             Controls.Add(textBoxDestPath);
             Controls.Add(label2);
@@ -283,7 +306,7 @@
         private Label label2;
         private TextBox textBoxDestPath;
         private Button buttonBrowseDestPath;
-        private ComboBox comboBoxTimer;
+        private ComboBox comboBoxTime;
         private Label label3;
         private Button buttonSetTimer;
         private Label label4;
@@ -298,5 +321,7 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem showToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private Label label5;
+        private ComboBox comboBoxTimeType;
     }
 }

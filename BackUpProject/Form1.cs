@@ -21,6 +21,7 @@ namespace BackUpProject
         private BackUpProjectContext context = new BackUpProjectContext();
         DbFiles dbFiles = new DbFiles();
         private List<DbFiles> lsFiles = new List<DbFiles>();
+        string mdfPath = string.Empty;
 
         private string connectionString = DbConfig.ConnectionString;
         public Form1()
@@ -34,15 +35,18 @@ namespace BackUpProject
         }
         private void ClearFields()
         {
+            lsFiles.Clear();
             textBoxDBName.Text = string.Empty;
             textBoxSourcePath.Text = string.Empty;
             textBoxDestPath.Text = string.Empty;
+            comboBoxTime.Text = string.Empty;
+            comboBoxTimeType.Text = string.Empty;
         }
         private void buttonBrowseSourcePath_Click(object sender, EventArgs e)
         {
             Open();
 
-            textBoxSourcePath.Text = lsFiles.Select(f => f.Mdf).FirstOrDefault();
+            textBoxSourcePath.Text = mdfPath;
         }
         private void buttonBrowseDestPath_Click(object sender, EventArgs e)
         {
@@ -66,6 +70,8 @@ namespace BackUpProject
 
                     var mdf = files.FirstOrDefault(f =>
                         Path.GetFileName(f).Equals($"{dbName}.mdf", StringComparison.OrdinalIgnoreCase));
+
+                    mdfPath = mdf!;
 
                     var ldf = files.FirstOrDefault(f =>
                         Path.GetFileName(f).EndsWith($"{dbName}.ldf", StringComparison.OrdinalIgnoreCase));
@@ -98,7 +104,14 @@ namespace BackUpProject
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             string dbName = textBoxDBName.Text;
+            time = 0;
+            string timeType = string.Empty;
 
+            if (comboBoxTime.Text == "" || comboBoxTimeType.Text == "")
+            {
+                MessageBox.Show("Please set a timer.");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(dbName))
             {
                 MessageBox.Show("Please enter a valid database name.");
@@ -114,7 +127,6 @@ namespace BackUpProject
                 MessageBox.Show("Please enter a valid Destination Path.");
                 return;
             }
-
             foreach (var f in lsFiles)
             {
                 PathToBackUp pathToBackUp = new PathToBackUp
@@ -124,13 +136,25 @@ namespace BackUpProject
                     LocTo = destPath,
                 };
                 context.Add(pathToBackUp);
+                //break;
             }
             context.SaveChanges();
 
+            if (comboBoxTime.Text != "")
+            {
+                time = Convert.ToInt32(comboBoxTime.Text);
+            }
+            if (comboBoxTimeType.Text != "")
+            {
+                timeType = comboBoxTimeType.Text;
+            }
             BackUpState backUpState = new BackUpState
             {
                 DbName = dbName,
+                LastBackUp = DateTime.Now,
                 StateIsOn = true,
+                Time = time,
+                TimeType = timeType,
             };
 
             context.Add(backUpState);
@@ -145,8 +169,22 @@ namespace BackUpProject
         {
             List<int> lsIds = new List<int>();
 
-            time = int.Parse(comboBoxTimer.Text);
+            string timeType = string.Empty;
 
+            if (comboBoxTime.Text != "")
+            {
+                time = int.Parse(comboBoxTime.Text);
+                timeType = comboBoxTimeType.Text;
+
+                //if (timeType == "Min")
+                //{
+                //    time *= 60000;
+                //}
+                //else if (timeType == "Hour")
+                //{
+                //    time *= 3600000;
+                //}
+            }
             if (time > 0)
             {
 
@@ -155,12 +193,12 @@ namespace BackUpProject
 
                 foreach (var id in lsIds)
                 {
-                    Update(id, "Timer", time.ToString());
+                    Update(id, "Time", time, "TimeType", timeType);
                 }
             }
             MessageBox.Show("Timer set successfully.");
         }
-        public void Update(int id, string columnName, string getValue)
+        public void Update(int id, string columnTime, int timeValue, string columnTimeType, string typeTimeValue)
         {
             string connectionString = null!;
             connectionString = DbConfig.ConnectionString;
@@ -174,9 +212,10 @@ namespace BackUpProject
                 using (cnn = new SqlConnection(connectionString))
                 {
                     cnn.Open();
-                    string sqlCommand = $"Update BackUpStates set {columnName}=@{columnName} Where Id={id}";
+                    string sqlCommand = $"Update BackUpStates set {columnTime}=@{columnTime}, {columnTimeType}=@{columnTimeType} Where Id={id}";
                     cmd = new SqlCommand(sqlCommand, cnn);
-                    cmd.Parameters.AddWithValue($"@{columnName}", getValue);
+                    cmd.Parameters.AddWithValue($"@{columnTime}", timeValue);
+                    cmd.Parameters.AddWithValue($"@{columnTimeType}", typeTimeValue);
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected == 1)
                     {
@@ -193,23 +232,47 @@ namespace BackUpProject
 
         private void timerBackUp_Tick(object sender, EventArgs e)
         {
-            var timerInterval = context.BackUpStates!.Select(t => new { t.Timer }).FirstOrDefault();
-            timerBackUp.Interval = timerInterval!.Timer * 60000; // Convert minutes to milliseconds
-
             SqlDbBackup sqlDbBackup = new SqlDbBackup();
 
             var dbNames = context.PathToBackUps!.Select(n => new { n.Name, n.LocFrom, n.LocTo }).ToHashSet();
 
-
             foreach (var db in dbNames)
             {
-                var getState = context.BackUpStates!.Select(t => new { t.DbName, t.StateIsOn }).Where(n => n.DbName == db.Name);
+                var getState = context.BackUpStates!.Select(t => new { t.DbName, t.StateIsOn, t.Time, t.TimeType, t.LastBackUp }).Where(n => n.DbName == db.Name);
 
                 bool timerState = getState.Select(s => s.StateIsOn).FirstOrDefault();
 
+                int time = getState.Select(s => s.Time).FirstOrDefault();
+
+                string timeType = getState.Select(s => s.TimeType).FirstOrDefault()!;
+
+                var lastBackUp = getState.Select(s => s.LastBackUp).FirstOrDefault();
+
+                DateTime now = DateTime.Now;
+                TimeSpan interval = new TimeSpan();
+
                 if (timerState)
                 {
-                    sqlDbBackup.BackupDatabase(connectionString, db.Name, db.LocTo);
+                    if (timeType == "Min")
+                    {
+                        interval = TimeSpan.FromMinutes(time);
+                    }
+                    else if (timeType == "Hour")
+                    {
+                        interval = TimeSpan.FromHours(time);
+                    }
+
+                    if (DateTime.Now - lastBackUp > interval)
+                    {
+                        sqlDbBackup.BackupDatabase(connectionString, db.Name, db.LocTo);
+
+                        var backUpState = context.BackUpStates!.FirstOrDefault(b => b.DbName == db.Name);
+
+                        backUpState!.LastBackUp = DateTime.Now;
+
+                        context.Update(backUpState);
+                        context.SaveChanges();
+                    }
                 }
             }
             MessageBox.Show("Automatic Backup Completed.");

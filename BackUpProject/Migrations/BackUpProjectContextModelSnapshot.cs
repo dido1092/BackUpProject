@@ -40,8 +40,12 @@ namespace BackUpProject.Migrations
                     b.Property<bool>("StateIsOn")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Timer")
+                    b.Property<int>("Time")
                         .HasColumnType("int");
+
+                    b.Property<string>("TimeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace BackUpProject
 {
@@ -22,7 +23,7 @@ namespace BackUpProject
 
             // Connection string към SQL Server Express
             connectionString = @"Server=.\SQLEXPRESS;Database=master;Trusted_Connection=True;Encrypt=False;";
-
+            
             // SQL команда без COMPRESSION
             string sql = $@"
                 BACKUP DATABASE [{databaseName}]

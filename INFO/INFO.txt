@@ -1,0 +1,3 @@
+ - За да се архивира дадена база -трябва да не е LocalD ами Express да се atach-не там в SQL Server Management Studio!
+
+ - За да разархивира .bak файла базата трябва да е delete-ната от SQL Server Management Studio!

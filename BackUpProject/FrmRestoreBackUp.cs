@@ -69,13 +69,13 @@ namespace BackUpProject
 
                 string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;Database=master;Trusted_Connection=True;Encrypt=False;";
 
-                RestoreDatabase(backupFilePath, connectionString);
+                RestoreDatabase(folder, backupFilePath, connectionString);
             }
         }
-        public void RestoreDatabase(string backupFilePath, string connectionString)
+        public void RestoreDatabase(string folder, string backupFilePath, string connectionString)
         {
             // 2. Папка за .mdf/.ldf
-            string folder = @"D:\BackupDB\Organizer";
+            //folder = @"D:\BackupDB\Organizer";
             Directory.CreateDirectory(folder);
 
             // 3. Ново име на база и файлове

@@ -33,7 +33,8 @@
             dataGridViewState = new DataGridView();
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             dbNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            Timer = new DataGridViewTextBoxColumn();
+            Time = new DataGridViewTextBoxColumn();
+            TimeType = new DataGridViewTextBoxColumn();
             stateIsOnDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
             lastBackUpDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             backUpStateBindingSource1 = new BindingSource(components);
@@ -48,13 +49,15 @@
             // 
             // dataGridViewState
             // 
+            dataGridViewState.AllowUserToAddRows = false;
+            dataGridViewState.AllowUserToDeleteRows = false;
             dataGridViewState.AutoGenerateColumns = false;
             dataGridViewState.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewState.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, dbNameDataGridViewTextBoxColumn, Timer, stateIsOnDataGridViewCheckBoxColumn, lastBackUpDataGridViewTextBoxColumn });
+            dataGridViewState.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, dbNameDataGridViewTextBoxColumn, Time, TimeType, stateIsOnDataGridViewCheckBoxColumn, lastBackUpDataGridViewTextBoxColumn });
             dataGridViewState.DataSource = backUpStateBindingSource1;
             dataGridViewState.Location = new Point(28, 74);
             dataGridViewState.Name = "dataGridViewState";
-            dataGridViewState.Size = new Size(687, 241);
+            dataGridViewState.Size = new Size(705, 241);
             dataGridViewState.TabIndex = 0;
             // 
             // idDataGridViewTextBoxColumn
@@ -70,11 +73,17 @@
             dbNameDataGridViewTextBoxColumn.HeaderText = "DbName";
             dbNameDataGridViewTextBoxColumn.Name = "dbNameDataGridViewTextBoxColumn";
             // 
-            // Timer
+            // Time
             // 
-            Timer.DataPropertyName = "Timer";
-            Timer.HeaderText = "Timer";
-            Timer.Name = "Timer";
+            Time.DataPropertyName = "Time";
+            Time.HeaderText = "Time";
+            Time.Name = "Time";
+            // 
+            // TimeType
+            // 
+            TimeType.DataPropertyName = "TimeType";
+            TimeType.HeaderText = "TimeType";
+            TimeType.Name = "TimeType";
             // 
             // stateIsOnDataGridViewCheckBoxColumn
             // 
@@ -155,12 +164,13 @@
         private BindingSource backUpStateBindingSource;
         private Button buttonUpdate;
         private Label labelItems;
-        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn dbNameDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn Timer;
-        private DataGridViewCheckBoxColumn stateIsOnDataGridViewCheckBoxColumn;
-        private DataGridViewTextBoxColumn lastBackUpDataGridViewTextBoxColumn;
         private BindingSource backUpStateBindingSource1;
         private Button buttonRefresh;
+        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn dbNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn Time;
+        private DataGridViewTextBoxColumn TimeType;
+        private DataGridViewCheckBoxColumn stateIsOnDataGridViewCheckBoxColumn;
+        private DataGridViewTextBoxColumn lastBackUpDataGridViewTextBoxColumn;
     }
 }
