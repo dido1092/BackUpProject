@@ -80,8 +80,8 @@ namespace BackUpProject
 
             // 3. Ново име на база и файлове
             string databaseName = $"{textBoxDBName.Text}Restored";
-            string dataFilePath = Path.Combine(folder, $"{textBoxDBName.Text}Restored.mdf");
-            string logFilePath = Path.Combine(folder, $"{textBoxDBName.Text}Restored_log.ldf");
+            string dataFilePath = Path.Combine(folder, $"{textBoxDBName.Text}.mdf");
+            string logFilePath = Path.Combine(folder, $"{textBoxDBName.Text}_log.ldf");
 
             string logicalData = string.Empty;
             string logicalLog = string.Empty;

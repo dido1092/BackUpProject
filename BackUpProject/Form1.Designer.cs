@@ -40,7 +40,6 @@
             label3 = new Label();
             buttonSetTimer = new Button();
             label4 = new Label();
-            textBoxDBName = new TextBox();
             buttonBackUp = new Button();
             buttonClear = new Button();
             notifyIconBackUp = new NotifyIcon(components);
@@ -53,6 +52,8 @@
             buttonRestore = new Button();
             label5 = new Label();
             comboBoxTimeType = new ComboBox();
+            buttonState = new Button();
+            comboBoxDBName = new ComboBox();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -77,7 +78,7 @@
             buttonBrowseSourcePath.BackColor = SystemColors.ActiveCaption;
             buttonBrowseSourcePath.Location = new Point(538, 108);
             buttonBrowseSourcePath.Name = "buttonBrowseSourcePath";
-            buttonBrowseSourcePath.Size = new Size(75, 26);
+            buttonBrowseSourcePath.Size = new Size(87, 26);
             buttonBrowseSourcePath.TabIndex = 2;
             buttonBrowseSourcePath.Text = "Browse";
             buttonBrowseSourcePath.UseVisualStyleBackColor = false;
@@ -104,7 +105,7 @@
             buttonBrowseDestPath.BackColor = SystemColors.ActiveCaption;
             buttonBrowseDestPath.Location = new Point(538, 162);
             buttonBrowseDestPath.Name = "buttonBrowseDestPath";
-            buttonBrowseDestPath.Size = new Size(75, 26);
+            buttonBrowseDestPath.Size = new Size(87, 26);
             buttonBrowseDestPath.TabIndex = 4;
             buttonBrowseDestPath.Text = "Browse";
             buttonBrowseDestPath.UseVisualStyleBackColor = false;
@@ -148,17 +149,10 @@
             label4.TabIndex = 9;
             label4.Text = "Data Base Name";
             // 
-            // textBoxDBName
-            // 
-            textBoxDBName.Location = new Point(216, 57);
-            textBoxDBName.Name = "textBoxDBName";
-            textBoxDBName.Size = new Size(308, 23);
-            textBoxDBName.TabIndex = 0;
-            // 
             // buttonBackUp
             // 
             buttonBackUp.BackColor = SystemColors.ActiveCaption;
-            buttonBackUp.Location = new Point(694, 57);
+            buttonBackUp.Location = new Point(498, 350);
             buttonBackUp.Name = "buttonBackUp";
             buttonBackUp.Size = new Size(127, 38);
             buttonBackUp.TabIndex = 7;
@@ -169,7 +163,7 @@
             // buttonClear
             // 
             buttonClear.BackColor = Color.IndianRed;
-            buttonClear.Location = new Point(694, 112);
+            buttonClear.Location = new Point(538, 50);
             buttonClear.Name = "buttonClear";
             buttonClear.Size = new Size(87, 34);
             buttonClear.TabIndex = 12;
@@ -235,9 +229,9 @@
             // buttonRestore
             // 
             buttonRestore.BackColor = SystemColors.ActiveCaption;
-            buttonRestore.Location = new Point(694, 276);
+            buttonRestore.Location = new Point(698, 206);
             buttonRestore.Name = "buttonRestore";
-            buttonRestore.Size = new Size(127, 29);
+            buttonRestore.Size = new Size(127, 33);
             buttonRestore.TabIndex = 15;
             buttonRestore.Text = "Restore BackUp";
             buttonRestore.UseVisualStyleBackColor = false;
@@ -262,11 +256,32 @@
             comboBoxTimeType.Size = new Size(61, 23);
             comboBoxTimeType.TabIndex = 17;
             // 
+            // buttonState
+            // 
+            buttonState.BackColor = SystemColors.ActiveCaption;
+            buttonState.Location = new Point(698, 50);
+            buttonState.Name = "buttonState";
+            buttonState.Size = new Size(127, 34);
+            buttonState.TabIndex = 18;
+            buttonState.Text = "State";
+            buttonState.UseVisualStyleBackColor = false;
+            buttonState.Click += buttonState_Click;
+            // 
+            // comboBoxDBName
+            // 
+            comboBoxDBName.FormattingEnabled = true;
+            comboBoxDBName.Location = new Point(216, 52);
+            comboBoxDBName.Name = "comboBoxDBName";
+            comboBoxDBName.Size = new Size(308, 23);
+            comboBoxDBName.TabIndex = 19;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(875, 468);
+            Controls.Add(comboBoxDBName);
+            Controls.Add(buttonState);
             Controls.Add(comboBoxTimeType);
             Controls.Add(label5);
             Controls.Add(buttonRestore);
@@ -274,7 +289,6 @@
             Controls.Add(buttonAdd);
             Controls.Add(buttonClear);
             Controls.Add(buttonBackUp);
-            Controls.Add(textBoxDBName);
             Controls.Add(label4);
             Controls.Add(buttonSetTimer);
             Controls.Add(label3);
@@ -310,7 +324,6 @@
         private Label label3;
         private Button buttonSetTimer;
         private Label label4;
-        private TextBox textBoxDBName;
         private Button buttonBackUp;
         private Button buttonClear;
         private NotifyIcon notifyIconBackUp;
@@ -323,5 +336,7 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private Label label5;
         private ComboBox comboBoxTimeType;
+        private Button buttonState;
+        private ComboBox comboBoxDBName;
     }
 }

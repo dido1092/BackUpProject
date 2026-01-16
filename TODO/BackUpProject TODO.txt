@@ -1,0 +1,16 @@
+Message за Commit 1: 
+
+"In FormState add buttons: "Load" and button "Set"; Add ComboBoxeses and TextBoxes 
+For easy way to Update Table BackUpState; Add button State for formState; Add button BackUp for manual backUp relational with DbName;"
+==================================================================================
+TODO:
+
+1. Да се направи метод Delete(), който да изтрива ако даден beckUp е StateOn всички в папката и да стои в нея последния backUp.
+
+2. Да се направи форма с DataGridView към таблицата PathToBackUp.
+
+3. Да се направи опция да се редактират стойностите в таблица PathToBackUp.
+
+4. Да направя бутон Load в Form1 за да се редактира пътя от базата и към папката с архива. (После да се измисли дали с бутона Add да се радактира и презапише или с нов бутоне Edit)
+
+5. Да направя приложението да се стартира в startUp.

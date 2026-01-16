@@ -36,7 +36,7 @@ namespace BackUpProject
         private void ClearFields()
         {
             lsFiles.Clear();
-            textBoxDBName.Text = string.Empty;
+            comboBoxDBName.Text = string.Empty;
             textBoxSourcePath.Text = string.Empty;
             textBoxDestPath.Text = string.Empty;
             comboBoxTime.Text = string.Empty;
@@ -64,7 +64,7 @@ namespace BackUpProject
                 {
                     string folderPath = dialog.SelectedPath;
 
-                    string dbName = textBoxDBName.Text;
+                    string dbName = comboBoxDBName.Text;
 
                     var files = Directory.GetFiles(folderPath);
 
@@ -98,12 +98,28 @@ namespace BackUpProject
         }
         private void buttonBackUp_Click(object sender, EventArgs e)
         {
-            FrmStates frmStates = new FrmStates();
-            frmStates.Show();
+            SqlDbBackup sqlDbBackup = new SqlDbBackup();
+
+            string dbName = comboBoxDBName.Text;
+
+            var dbNames = context.PathToBackUps!.Select(n => new { n.Name, n.LocTo }).Where(n => n.Name == dbName).FirstOrDefault();
+
+            string locationTo = dbNames!.LocTo;
+
+            sqlDbBackup.BackupDatabase(connectionString, dbNames!.Name, dbNames.LocTo);
+
+            var backUpState = context.BackUpStates!.FirstOrDefault(b => b.DbName == dbNames.Name);
+
+            backUpState!.LastBackUp = DateTime.Now;
+
+            context.Update(backUpState);
+            context.SaveChanges();
+
+            MessageBox.Show("Backup Completed.");
         }
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            string dbName = textBoxDBName.Text;
+            string dbName = comboBoxDBName.Text;
             time = 0;
             string timeType = string.Empty;
 
@@ -272,10 +288,11 @@ namespace BackUpProject
 
                         context.Update(backUpState);
                         context.SaveChanges();
+
+                        MessageBox.Show("Automatic Backup Completed.");
                     }
                 }
             }
-            MessageBox.Show("Automatic Backup Completed.");
         }
 
         private void buttonRestore_Click(object sender, EventArgs e)
@@ -343,6 +360,26 @@ namespace BackUpProject
             {
                 MaxmizedFromTray();
             }
+
+            var dbNames = context.PathToBackUps!.Select(n => new { n.Name }).ToHashSet();
+
+            comboBoxDBName.Items.Clear();
+
+            foreach (var dbName in dbNames)
+            {
+                comboBoxDBName.Items.Add(dbName.Name);
+            }
+        }
+
+        private void buttonState_Click(object sender, EventArgs e)
+        {
+            FrmStates frmStates = new FrmStates();
+            frmStates.Show();
+        }
+
+        private void textBoxDBName_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using BackUpProject.BackUpProjectDataCommon;
+﻿using BackUpProject.BackUpProjectData;
+using BackUpProject.BackUpProjectDataCommon;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,7 @@ namespace BackUpProject
     public partial class FrmStates : Form
     {
         private int idDb = 0;
+        private BackUpProjectContext context = new BackUpProjectContext();
         public FrmStates()
         {
             InitializeComponent();
@@ -20,16 +23,6 @@ namespace BackUpProject
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            //string connectionString = null;
-            //connectionString = DbConfig.ConnectionString;
-
-            //SqlConnection cnn = new SqlConnection(connectionString);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.Connection = cnn;
-
-            //int rowindex = dataGridViewState.CurrentRow!.Index;
-            //int colindex = dataGridViewState.CurrentCell!.ColumnIndex;
-
             Update(idDb);
         }
         public void Update(int idDb)
@@ -83,6 +76,7 @@ namespace BackUpProject
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             Refresh();
+            LoadIds();
         }
 
         private void Refresh()
@@ -108,6 +102,78 @@ namespace BackUpProject
         private void FrmStates_Load(object sender, EventArgs e)
         {
             Refresh();
+
+            LoadIds();
+        }
+
+        private void LoadIds()
+        {
+            comboBoxIds.Items.Clear();
+
+            var ids = context.BackUpStates!.Select(x => x.Id);
+
+            foreach (var id in ids)
+            {
+                comboBoxIds.Items.Add(id);
+            }
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            int selectedId = int.Parse(comboBoxIds.Text);
+
+            var state = context.BackUpStates!.Select(x => new
+            {
+                x.Id,
+                x.DbName,
+                x.Time,
+                x.TimeType,
+                x.StateIsOn
+            }).FirstOrDefault(x => x.Id == selectedId);
+
+            textBoxDbName.Text = state!.DbName;
+            comboBoxTime.Text = state.Time.ToString();
+            comboBoxTimeType.Text = state.TimeType;
+            comboBoxStates.Text = state.StateIsOn.ToString();
+        }
+
+        private void buttonSet_Click(object sender, EventArgs e)
+        {
+            int id = int.Parse(comboBoxIds.Text);
+            int time = int.Parse(comboBoxTime.Text);
+            string timeType = comboBoxTimeType.Text;
+            bool stateIsOn = bool.Parse(comboBoxStates.Text);
+
+            SetState(id, time, timeType, stateIsOn);
+        }
+        private void SetState(int id, int timeValue, string timeTypeValue, bool stateIsOneValue)
+        {
+            SqlConnection cnn = new SqlConnection(DbConfig.ConnectionString);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cnn;
+
+            try
+            {
+                using (cnn = new SqlConnection(DbConfig.ConnectionString))
+                {
+                    cnn.Open();
+                    string sqlCommand = $"Update BackUpStates set Time=@Time, TimeType=@TimeType, StateIsOn=@StateIsOn Where Id={id}";
+                    cmd = new SqlCommand(sqlCommand, cnn);
+                    cmd.Parameters.AddWithValue($"@Time", timeValue);
+                    cmd.Parameters.AddWithValue($"@TimeType", timeTypeValue);
+                    cmd.Parameters.AddWithValue($"@StateIsOn", stateIsOneValue);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected == 1)
+                    {
+                        MessageBox.Show("Information Updated", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
