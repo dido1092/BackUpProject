@@ -54,6 +54,8 @@
             comboBoxTimeType = new ComboBox();
             buttonState = new Button();
             comboBoxDBName = new ComboBox();
+            buttonLoad = new Button();
+            buttonEdit = new Button();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -163,9 +165,9 @@
             // buttonClear
             // 
             buttonClear.BackColor = Color.IndianRed;
-            buttonClear.Location = new Point(538, 50);
+            buttonClear.Location = new Point(698, 350);
             buttonClear.Name = "buttonClear";
-            buttonClear.Size = new Size(87, 34);
+            buttonClear.Size = new Size(127, 34);
             buttonClear.TabIndex = 12;
             buttonClear.Text = "Clear";
             buttonClear.UseVisualStyleBackColor = false;
@@ -203,9 +205,9 @@
             // buttonAdd
             // 
             buttonAdd.BackColor = SystemColors.ActiveCaption;
-            buttonAdd.Location = new Point(389, 202);
+            buttonAdd.Location = new Point(426, 201);
             buttonAdd.Name = "buttonAdd";
-            buttonAdd.Size = new Size(135, 37);
+            buttonAdd.Size = new Size(98, 37);
             buttonAdd.TabIndex = 13;
             buttonAdd.Text = "Add to DB";
             buttonAdd.UseVisualStyleBackColor = false;
@@ -229,7 +231,7 @@
             // buttonRestore
             // 
             buttonRestore.BackColor = SystemColors.ActiveCaption;
-            buttonRestore.Location = new Point(698, 206);
+            buttonRestore.Location = new Point(698, 165);
             buttonRestore.Name = "buttonRestore";
             buttonRestore.Size = new Size(127, 33);
             buttonRestore.TabIndex = 15;
@@ -275,11 +277,35 @@
             comboBoxDBName.Size = new Size(308, 23);
             comboBoxDBName.TabIndex = 19;
             // 
+            // buttonLoad
+            // 
+            buttonLoad.BackColor = SystemColors.ActiveCaption;
+            buttonLoad.Location = new Point(538, 52);
+            buttonLoad.Name = "buttonLoad";
+            buttonLoad.Size = new Size(87, 26);
+            buttonLoad.TabIndex = 20;
+            buttonLoad.Text = "Load";
+            buttonLoad.UseVisualStyleBackColor = false;
+            buttonLoad.Click += buttonLoad_Click;
+            // 
+            // buttonEdit
+            // 
+            buttonEdit.BackColor = SystemColors.ActiveCaption;
+            buttonEdit.Location = new Point(538, 201);
+            buttonEdit.Name = "buttonEdit";
+            buttonEdit.Size = new Size(87, 37);
+            buttonEdit.TabIndex = 21;
+            buttonEdit.Text = "Edit";
+            buttonEdit.UseVisualStyleBackColor = false;
+            buttonEdit.Click += buttonEdit_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(875, 468);
+            Controls.Add(buttonEdit);
+            Controls.Add(buttonLoad);
             Controls.Add(comboBoxDBName);
             Controls.Add(buttonState);
             Controls.Add(comboBoxTimeType);
@@ -338,5 +364,7 @@
         private ComboBox comboBoxTimeType;
         private Button buttonState;
         private ComboBox comboBoxDBName;
+        private Button buttonLoad;
+        private Button buttonEdit;
     }
 }

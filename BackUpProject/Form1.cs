@@ -2,6 +2,7 @@ using BackUpProject.BackUpProjectData;
 using BackUpProject.BackUpProjectDataCommon;
 using BackUpProject.BackUpProjectDataModels;
 using Microsoft.Data.SqlClient;
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -27,8 +28,17 @@ namespace BackUpProject
         public Form1()
         {
             InitializeComponent();
-        }
 
+            Thread thrDateTimeNow = new Thread(SetStartup);
+            thrDateTimeNow.IsBackground = true;
+            thrDateTimeNow.Start();
+        }
+        private void SetStartup()
+        {
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)!;
+
+            rk.SetValue("BackUpProject", Application.ExecutablePath);
+        }
         private void buttonClear_Click(object sender, EventArgs e)
         {
             ClearFields();
@@ -143,6 +153,18 @@ namespace BackUpProject
                 MessageBox.Show("Please enter a valid Destination Path.");
                 return;
             }
+
+            var dbNames = context.PathToBackUps!.Select(n => new { n.Name }).ToHashSet();
+
+            foreach (var name in dbNames)
+            {
+                if (name.Name == dbName)
+                {
+                    MessageBox.Show("Database already exists.");
+                    return;
+                }
+            }
+
             foreach (var f in lsFiles)
             {
                 PathToBackUp pathToBackUp = new PathToBackUp
@@ -380,6 +402,61 @@ namespace BackUpProject
         private void textBoxDBName_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            string dbName = comboBoxDBName.Text;
+
+            var sourcePaths = context.PathToBackUps!.Select(n => new { n.Name, n.LocFrom }).Where(n => n.Name == dbName).FirstOrDefault();
+
+            var destPaths = context.PathToBackUps!.Select(n => new { n.Name, n.LocTo }).Where(n => n.Name == dbName).FirstOrDefault();
+
+            textBoxSourcePath.Text = sourcePaths!.LocFrom;
+            textBoxDestPath.Text = destPaths!.LocTo;
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            string dbName = comboBoxDBName.Text;
+
+            string locFrom = textBoxSourcePath.Text;
+            string locTo = textBoxDestPath.Text;
+
+            Edit(dbName, locFrom,  locTo);
+
+            MessageBox.Show("Information Edited Successfully.");
+        }
+        public void Edit(string dbName, string locFrom, string locTo)
+        {
+            string connectionString = null;
+            connectionString = DbConfig.ConnectionString;
+
+            SqlConnection cnn = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cnn;
+
+            try
+            {
+                using (cnn = new SqlConnection(connectionString))
+                {
+                    cnn.Open();
+                    string sqlCommand = $"Update PathToBackUps set LocFrom=@LocFrom, LocTo=@LocTo Where Name=N'{dbName}'";
+                    cmd = new SqlCommand(sqlCommand, cnn);
+                    cmd.Parameters.AddWithValue($"@LocFrom", locFrom);
+                    cmd.Parameters.AddWithValue($"@LocTo", locTo);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected == 1)
+                    {
+                        MessageBox.Show("Information Updated", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    cnn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
